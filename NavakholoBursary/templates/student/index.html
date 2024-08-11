@@ -20,11 +20,18 @@
 
     <!-- Custom styles for this template-->
     <link href="{% static 'assets/css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
 
 </head>
 
 <body id="page-top">
-
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -37,46 +44,86 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                    
                     </div>
 
                     <!-- Content Row -->
                     <div class="row">
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- Personal Information Card -->
+                        <div class="col-xl-6 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
-                                        <div class="col-6">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                <a href="{% url 'personalInformation' %}" class="btn btn-success" style="font-size: 8px;">student Information</a>
+                                        {% if personal_information %}
+                                            <div class="col-6">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    <a href="{% url 'personalInformation' %}" class="btn btn-info" style="font-size: 8px;">Information Filled</a>
+                                                </div>
+                                                <a href="{% url 'personalInformation' %}">
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800" style="font-size: 10px;">Update</div>
+                                                </a>
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" style="font-size: 10px;">update</div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                <a href="your-link-url" class="btn btn-success" style="font-size: 8px;">Institution</a>
+                                        {% else %}
+                                            <div class="col-6">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    <a href="{% url 'personalInformation' %}" class="btn btn-warning" style="font-size: 8px;">Fill Student Info</a>
+                                                </div>
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" style="font-size: 10px;">Update</div>
-                                        </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Earnings (Monthly) Card Example -->
+                    
+                        <!-- Institution Information Card -->
+                        <div class="col-xl-6 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        {% if institution_information %}
+                                            <div class="col-6">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    <a href="{% url 'institutionInformation' %}" class="btn btn-info" style="font-size: 8px;">Institution Filled</a>
+                                                </div>
+                                                <a href="{% url 'institutionInformation' %}">
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800" style="font-size: 10px;">Update</div>
+                                                </a>
+                                            </div>
+                                        {% else %}
+                                            <div class="col-6">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    <a href="{% url 'institutionInformation' %}" class="btn btn-warning" style="font-size: 8px;">Fill Institution</a>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <!-- Parent Information Card -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                <a href="your-link-url" class="btn btn-success" style="font-size: 8px;">parent/Guardian Info</a>
+                                                {% if parent_type and parent_information %}
+                                                        <a href="{% url 'familyInformation' %}" class="btn btn-info" style="font-size: 8px;">Parent/Guardian Filled</a>
+                                                        <a href="{% url 'familyInformation' %}">
+                                                            <div class="h5 mb-0 font-weight-bold text-gray-800" style="font-size: 10px;">Update</div>
+                                                        </a>
+                                                    {% elif parent_type and not parent_information %}
+                                                        <!-- If parent type exists but parent information is not filled -->
+                                                        <a href="{% url 'familyInformation' %}" class="btn btn-warning" style="font-size: 8px;">Fill Parent/Guardian Info</a>
+                                                   
+                                                    {% else %}
+                                                    <!-- If parent type does not exist -->
+                                                    <a href="{% url 'parent_type' %}" class="btn btn-warning" style="font-size: 8px;">Choose Parent</a>
+                                                    {% endif %}
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" style="font-size: 10px;">Update</div>
                                         </div>
+                                        
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </div>
@@ -84,29 +131,29 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
+                        
+                    
+                        <!-- Additional Information Card -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                <a href="your-link-url" class="btn btn-success" style="font-size: 8px;">Additional Info</a>
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" style="font-size: 10px;">Update</div>
+                                        {% if additional_information %}
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    <a href="{% url 'additionalInformation' %}" class="btn btn-info" style="font-size: 8px;">Additional Info Filled</a>
                                                 </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
+                                                <a href="{% url 'additionalInformation' %}">
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800" style="font-size: 10px;">Update</div>
+                                                </a>
+                                            </div>
+                                        {% else %}
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    <a href="{% url 'additionalInformation' %}" class="btn btn-warning" style="font-size: 8px;">Fill Additional Info</a>
                                                 </div>
                                             </div>
-                                        </div>
+                                        {% endif %}
                                         <div class="col-auto">
                                             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
                                         </div>
@@ -114,16 +161,53 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Pending Requests Card Example -->
+                        <!-- Application Status Card -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                               Status</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">View Details</div>
+                                           {% if fullapplication %}
+                                            <ul>
+                                                <li>
+                                                    <div class="text-xs font-weight-bold text-success ">Application Completed</div>
+                                                </li>
+                                          <ul>
+                                            {% endif %}
+
+                                            {% if approved_status %}
+                                            <ul>
+                                                <li>
+                                                    <div class="text-xs font-weight-bold text-success ">Application verified and accepted</div>
+                                                </li>
+                                          <ul>
+                                            {% elif declined_status %}
+                                            <ul>
+                                                <li>
+                                                    <div class="text-xs font-weight-bold text-danger ">Application verified but declined</div>
+                                                </li>
+                                          <ul>
+                                            {% else %}
+                                            <ul>
+                                                <li>
+                                                    <div class="text-xs font-weight-bold text-primary ">Pending verification </div>
+                                                </li>
+                                          <ul>
+                                            {% endif %}
+
+                                            {% if allocation %}
+                                            <ul>
+                                                <li>
+                                                    <div class="text-xs font-weight-bold text-success ">You have been allocated {{allocated_amount}}</div>
+                                                </li>
+                                          <ul>
+                                            {% else %}
+                                            <ul>
+                                                <li>
+                                                    <div class="text-xs font-weight-bold text-success ">Pending allocation</div>
+                                                </li>
+                                          <ul>
+                                            {% endif %}
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -133,6 +217,8 @@
                             </div>
                         </div>
                     </div>
+                    
+
 
             
 
